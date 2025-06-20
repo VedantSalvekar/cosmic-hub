@@ -353,13 +353,7 @@ const LoadingFallback = () => (
  */
 const SolarSystemBackground = () => {
   return (
-    <div 
-      className="fixed inset-0 w-full h-full" 
-      style={{ 
-        zIndex: -10,
-        backgroundColor: '#000000'
-      }}
-    >
+    <div className="fixed inset-0 w-full h-full z-0 bg-black">
       <Canvas
         camera={{ 
           position: [50, 90, 100], // Better view of the whole solar system
@@ -367,13 +361,7 @@ const SolarSystemBackground = () => {
           near: 0.1,
           far: 1000
         }}
-        style={{ 
-          width: '100%',
-          height: '100%',
-          backgroundColor: '#000000',
-          position: 'fixed',
-          zIndex: -10
-        }}
+        className="w-full h-full fixed z-0 bg-black"
       >
         <Suspense fallback={<LoadingFallback />}>
           <SolarSystemScene />
