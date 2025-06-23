@@ -6,19 +6,21 @@
     "doc": "docs"
   },
   "scripts": {
-    "dev": "concurrently \"npm run client:dev\" \"npm run server:dev\"",
-    "client:dev": "cd client && npm run dev",
-    "server:dev": "cd server && npm run dev",
-    "client:build": "cd client && npm run build",
-    "server:start": "cd server && npm start",
-    "install:all": "npm install && cd client && npm install && cd ../server && npm install",
+    "dev": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "preview": "cd client && npm run preview",
+    "lint": "cd client && npm run lint",
+    "install:all": "npm install && cd client && npm install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["cosmic", "awareness", "mindfulness", "react", "vite"],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "A full-stack web application for cosmic awareness and mindfulness practices",
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^9.1.2",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.10"
   }
 }

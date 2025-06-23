@@ -3,6 +3,7 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
+    "./src/**/*.{vue,svelte}",
   ],
   theme: {
     extend: {
@@ -23,8 +24,14 @@ export default {
           '0%, 100%': { transform: 'translateY(0px)' },
           '50%': { transform: 'translateY(-20px)' },
         }
+      },
+      backdropBlur: {
+        xs: '2px',
       }
     },
   },
   plugins: [],
+  corePlugins: {
+    preflight: true,
+  }
 } 

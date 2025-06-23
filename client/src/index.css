@@ -1,6 +1,79 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* React DatePicker Styles */
+@import 'react-datepicker/dist/react-datepicker.css';
+
+/* Custom DatePicker Theme */
+.react-datepicker {
+  background-color: #1f2937 !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
+  z-index: 999999 !important;
+  position: relative !important;
+}
+
+.react-datepicker-popper {
+  z-index: 999999 !important;
+  position: fixed !important;
+}
+
+.react-datepicker__tab-loop {
+  z-index: 999999 !important;
+}
+
+.react-datepicker-wrapper {
+  z-index: 999999 !important;
+}
+
+/* Portal styles */
+#date-picker-portal {
+  z-index: 999999 !important;
+}
+
+.react-datepicker__portal {
+  z-index: 999999 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: rgba(0, 0, 0, 0.3) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.react-datepicker__header {
+  background-color: #374151 !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.3) !important;
+  border-radius: 12px 12px 0 0 !important;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__day-name {
+  color: #ffffff !important;
+}
+
+.react-datepicker__day {
+  color: #d1d5db !important;
+  border-radius: 6px !important;
+}
+
+.react-datepicker__day:hover {
+  background-color: rgba(59, 130, 246, 0.2) !important;
+  color: #ffffff !important;
+}
+
+.react-datepicker__day--selected {
+  background-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+.react-datepicker__day--today {
+  background-color: rgba(59, 130, 246, 0.3) !important;
+  color: #ffffff !important;
+}
 
 @layer base {
   * {
