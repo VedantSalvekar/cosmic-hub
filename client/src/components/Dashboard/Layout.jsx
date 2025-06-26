@@ -16,6 +16,7 @@ import SolarSystemBackground from './SolarSystemBackground';
 import Footer from './Footer';
 import FloatingMenuButton from './FloatingMenuButton';
 import APOD from './APOD';
+import AsteroidWatch from './AsteroidWatch';
 
 const Layout = ({ children }) => {
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -182,6 +183,11 @@ const Layout = ({ children }) => {
           {activeSection === 'apod' ? (
             // APOD page takes full screen without padding
             <APOD />
+          ) : activeSection === 'asteroids' ? (
+            // Asteroid Watch page with padding
+            <main className="flex-1 p-6 relative z-10">
+              <AsteroidWatch />
+            </main>
           ) : (
             <main className="flex-1 p-10 relative z-10">
               {children || (
