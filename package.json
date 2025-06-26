@@ -6,17 +6,20 @@
     "doc": "docs"
   },
   "scripts": {
-    "dev": "cd client && npm run dev",
-    "build": "cd client && npm run build",
-    "preview": "cd client && npm run preview",
-    "lint": "cd client && npm run lint",
-    "install:all": "npm install && cd client && npm install",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
+    "backend:dev": "cd backend && npm run dev",
+    "frontend:dev": "cd frontend && npm run dev",
+    "backend:start": "cd backend && npm start",
+    "frontend:build": "cd frontend && npm run build",
+    "frontend:preview": "cd frontend && npm run preview",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "lint": "cd frontend && npm run lint",
+    "test": "echo \"Tests not implemented yet\" && exit 0"
   },
-  "keywords": ["cosmic", "awareness", "mindfulness", "react", "vite"],
+  "keywords": ["cosmic", "awareness", "nasa", "space", "react", "nodejs", "express"],
   "author": "",
   "license": "ISC",
-  "description": "A full-stack web application for cosmic awareness and mindfulness practices",
+  "description": "A full-stack web application for cosmic awareness using NASA's APIs. Features React frontend and Node.js/Express backend.",
   "devDependencies": {
     "autoprefixer": "^10.4.21",
     "concurrently": "^9.1.2",

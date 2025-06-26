@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import { ExternalLink, Calendar, Camera, Loader2, AlertCircle } from 'lucide-react';
+import apiClient from '../../services/api';
 
 const APOD = () => {
   const [apodData, setApodData] = useState(null);
@@ -15,24 +16,9 @@ const APOD = () => {
       setError(null);
       setImageLoaded(false);
       
-      const dateParam = date ? `&date=${date.toISOString().split('T')[0]}` : '';
-      // Use environment variable or fallback to DEMO_KEY
-      const apiKey = import.meta.env.VITE_NASA_API_KEY && import.meta.env.VITE_NASA_API_KEY !== 'your_nasa_api_key_here' 
-        ? import.meta.env.VITE_NASA_API_KEY 
-        : 'DEMO_KEY';
-      console.log('NASA APOD API URL:', `https://api.nasa.gov/planetary/apod?api_key=${apiKey}${dateParam}`);
-      console.log('Using API key:', apiKey === 'DEMO_KEY' ? 'DEMO_KEY (limited to 30 requests/hour)' : 'Personal API key');
-      
-      const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}${dateParam}`);
-      
-      if (!response.ok) {
-        if (response.status === 429) {
-          throw new Error(`API Rate limit exceeded. ${apiKey === 'DEMO_KEY' ? 'DEMO_KEY is limited to 30 requests/hour. Please add your personal NASA API key to .env file.' : 'Please wait before making more requests.'}`);
-        }
-        throw new Error(`NASA API Error: ${response.status} ${response.statusText}`);
-      }
-      
-      const data = await response.json();
+      console.log('Fetching APOD from backend API...');
+      const dateString = date ? date.toISOString().split('T')[0] : null;
+      const data = await apiClient.getAPOD(dateString);
       console.log('APOD Data:', data); // Debug log
       setApodData(data);
     } catch (err) {

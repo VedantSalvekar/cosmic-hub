@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { RiMenu3Line, RiSpaceShipLine } from 'react-icons/ri';
 import { HiOutlineSparkles } from 'react-icons/hi2';
 

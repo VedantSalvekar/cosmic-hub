@@ -27,9 +27,8 @@ const HistoricalAnalysis = () => {
       console.log(`Fetching historical asteroid data for ${selectedYear}...`);
       
       const events = [];
-             const apiKey = import.meta.env.VITE_NASA_API_KEY && import.meta.env.VITE_NASA_API_KEY !== 'your_nasa_api_key_here' 
-         ? import.meta.env.VITE_NASA_API_KEY 
-         : 'DEMO_KEY'; // Use environment variable or fallback to DEMO_KEY
+                   // Using backend API instead of direct NASA calls
+      console.log('HistoricalAnalysis: Using backend API for NASA data');
       
       // Fetch data for multiple date ranges throughout the selected year
       const dateRanges = [
@@ -50,11 +49,11 @@ const HistoricalAnalysis = () => {
       // Fetch data for each date range
       for (const range of dateRanges) {
         try {
-                     const neoWsUrl = `https://api.nasa.gov/neo/rest/v1/feed?start_date=${range.start}&end_date=${range.end}&api_key=${apiKey}`;
-           console.log(`Fetching: ${neoWsUrl}`);
-           console.log('Using API key:', apiKey === 'DEMO_KEY' ? 'DEMO_KEY (limited to 30 requests/hour)' : 'Personal API key');
+                               // Using backend API instead of direct NASA API call
+          const backendUrl = `http://localhost:3001/api/asteroids/feed?start_date=${range.start}&end_date=${range.end}`;
+          console.log(`Fetching from backend: ${backendUrl}`);
           
-                     const response = await fetch(neoWsUrl);
+          const response = await fetch(backendUrl);
            
            if (response.status === 429) {
              console.warn(`Rate limit exceeded for range ${range.start} to ${range.end}`);
@@ -62,7 +61,8 @@ const HistoricalAnalysis = () => {
            }
            
            if (response.ok) {
-            const data = await response.json();
+            const responseData = await response.json();
+            const data = responseData.data; // Backend wraps data in success/data structure
             
             if (data && data.near_earth_objects) {
               // Process each date's data

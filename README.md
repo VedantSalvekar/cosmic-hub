@@ -79,21 +79,29 @@ npm run install:all
 ```
 
 2. **Set up environment variables:**
-   Create `server/.env` file:
 
-```env
-# NASA API Configuration
-NASA_API_KEY=your_nasa_api_key_here
-NASA_BASE_URL=https://api.nasa.gov
+   **Backend** (`backend/.env`):
 
-# Server Configuration
-PORT=5000
-NODE_ENV=development
-CLIENT_URL=http://localhost:5173
+   ```env
+   # NASA API Configuration
+   NASA_API_KEY=your_nasa_api_key_here
+   NASA_BASE_URL=https://api.nasa.gov
 
-# Cache Configuration
-CACHE_TTL=3600
-```
+   # Server Configuration
+   PORT=3001
+   NODE_ENV=development
+   CLIENT_URL=http://localhost:5173
+
+   # Cache Configuration
+   CACHE_TTL=3600
+   ```
+
+   **Frontend** (`frontend/.env`):
+
+   ```env
+   # Backend API URL
+   VITE_API_BASE_URL=http://localhost:3001
+   ```
 
 3. **Start development servers:**
 
@@ -103,30 +111,33 @@ npm run dev
 
 This will start:
 
-- Frontend at `http://localhost:5173`
-- Backend API at `http://localhost:5000`
+- **Backend API** at `http://localhost:3001`
+- **Frontend** at `http://localhost:5173`
+
+The frontend will automatically connect to the backend API for all NASA data requests.
 
 ## 📁 Project Structure
 
 ```
 cosmic-awareness-hub/
-├── client/                 # React frontend
+├── frontend/               # React frontend
 │   ├── src/
 │   │   ├── components/     # React components
-│   │   ├── hooks/          # Custom hooks
-│   │   ├── context/        # Context providers
-│   │   ├── utils/          # Utility functions
+│   │   ├── services/       # API client services
 │   │   └── styles/         # CSS styles
 │   ├── public/             # Static assets
 │   └── package.json
-├── server/                 # Node.js backend
-│   ├── src/
-│   │   ├── routes/         # API routes
-│   │   ├── services/       # NASA API services
-│   │   └── index.js        # Server entry point
-│   └── package.json
+├── backend/                # Node.js/Express backend
+│   ├── routes/             # API route handlers
+│   │   ├── health.js       # Health check endpoints
+│   │   ├── apod.js         # APOD API routes
+│   │   └── asteroids.js    # Asteroid API routes
+│   ├── services/           # NASA API services
+│   │   └── nasaApi.js      # NASA API client with caching
+│   ├── server.js           # Express server entry point
+│   ├── package.json        # Backend dependencies
+│   └── .env               # Environment variables
 ├── docs/                   # Documentation
-├── shared/                 # Shared utilities
 └── README.md
 ```
 

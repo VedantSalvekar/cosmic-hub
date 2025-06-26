@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import AsteroidCard from './components/AsteroidCard';
 import AsteroidTable from './components/AsteroidTable';
+import apiClient from '../../../services/api';
 
 const AsteroidTracker = () => {
   const [asteroids, setAsteroids] = useState([]);
@@ -110,39 +111,22 @@ const AsteroidTracker = () => {
     setError(null);
     
     try {
-      console.log('Fetching real NASA NeoWs asteroid data...');
+      console.log('Fetching asteroid data from backend API...');
       
-      // Calculate date range for NASA NeoWs API
+      // Calculate date range (backend handles the 7-day limit)
       const startDate = new Date();
       const endDate = new Date();
-      endDate.setDate(startDate.getDate() + Math.min(filters.dateRange, 7)); // NeoWs API limits to 7 days max
+      endDate.setDate(startDate.getDate() + Math.min(filters.dateRange, 7));
       
       const startDateStr = startDate.toISOString().split('T')[0];
       const endDateStr = endDate.toISOString().split('T')[0];
       
-      // NASA NeoWs API endpoint
-      const apiKey = import.meta.env.VITE_NASA_API_KEY && import.meta.env.VITE_NASA_API_KEY !== 'your_nasa_api_key_here' 
-        ? import.meta.env.VITE_NASA_API_KEY 
-        : 'DEMO_KEY'; // Use environment variable or fallback to DEMO_KEY
-      const neoWsUrl = `https://api.nasa.gov/neo/rest/v1/feed?start_date=${startDateStr}&end_date=${endDateStr}&api_key=${apiKey}`;
-      
-      console.log('NASA NeoWs API URL:', neoWsUrl);
-      console.log('Using API key:', apiKey === 'DEMO_KEY' ? 'DEMO_KEY (limited to 30 requests/hour)' : 'Personal API key');
-      
-      const response = await fetch(neoWsUrl);
-      
-      if (!response.ok) {
-        if (response.status === 429) {
-          throw new Error(`API Rate limit exceeded. ${apiKey === 'DEMO_KEY' ? 'DEMO_KEY is limited to 30 requests/hour. Please add your personal NASA API key to .env file.' : 'Please wait before making more requests.'}`);
-        }
-        throw new Error(`NASA API Error: ${response.status} ${response.statusText}`);
-      }
-      
-      const data = await response.json();
-      console.log('NASA NeoWs API Response:', data);
+      // Use backend API instead of direct NASA API call
+      const data = await apiClient.getAsteroidFeed(startDateStr, endDateStr);
+      console.log('Backend API Response:', data);
       
       if (!data || !data.near_earth_objects) {
-        throw new Error('Invalid response format from NASA API');
+        throw new Error('Invalid response format from backend API');
       }
       
       // Transform NASA NeoWs data to our format
