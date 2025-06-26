@@ -351,9 +351,9 @@ const LoadingFallback = () => (
 /**
  * Solar System Background Component
  */
-const SolarSystemBackground = () => {
+const SolarSystemBackground = ({ isBlurred = false }) => {
   return (
-    <div className="fixed inset-0 w-full h-full z-0 bg-black">
+    <div className={`fixed inset-0 w-full h-full z-0 bg-black transition-all duration-500 ${isBlurred ? 'blur-sm' : ''}`}>
       <Canvas
         camera={{ 
           position: [50, 90, 100], // Better view of the whole solar system

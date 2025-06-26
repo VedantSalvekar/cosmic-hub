@@ -44,24 +44,26 @@ const Layout = ({ children }) => {
 
   return (
     <div className="flex h-screen">
-      {/* Time & Location - Top Right */}
-      <div 
-        className="fixed top-4 right-4 sm:top-6 sm:right-6 z-[9999] text-right text-white/90 pointer-events-none"
-        style={{
-          position: 'fixed',
-          top: '16px',
-          right: '16px',
-          zIndex: 9999,
-          textAlign: 'right'
-        }}
-      >
-        <div className="text-sm font-semibold tracking-wide">
-          {formatUTCTime(currentTime)} UTC
+      {/* Time & Location - Top Right - Hide when on Asteroid Watch or APOD */}
+      {activeSection !== 'asteroids' && activeSection !== 'apod' && (
+        <div 
+          className="fixed top-4 right-4 sm:top-6 sm:right-6 z-[9999] text-right text-white/90 pointer-events-none"
+          style={{
+            position: 'fixed',
+            top: '16px',
+            right: '16px',
+            zIndex: 9999,
+            textAlign: 'right'
+          }}
+        >
+          <div className="text-sm font-semibold tracking-wide">
+            {formatUTCTime(currentTime)} UTC
+          </div>
+          <div className="text-xs text-white/60 italic">
+            Dublin, Ireland
+          </div>
         </div>
-        <div className="text-xs text-white/60 italic">
-          Dublin, Ireland
-        </div>
-      </div>
+      )}
 
       {/* Professional Sidebar */}
       <div
@@ -169,8 +171,8 @@ const Layout = ({ children }) => {
 
       {/* Main Content Container */}
       <div className="flex-1 relative bg-black">
-        {/* 3D Solar System Background - Only show when not on APOD page */}
-        {activeSection !== 'apod' && <SolarSystemBackground />}
+        {/* 3D Solar System Background - Show with blur effect for APOD and Asteroid Watch */}
+        <SolarSystemBackground isBlurred={activeSection === 'asteroids' || activeSection === 'apod'} />
         
         {/* Floating Menu Button */}
         <FloatingMenuButton 
@@ -189,7 +191,7 @@ const Layout = ({ children }) => {
               <AsteroidWatch />
             </main>
           ) : (
-            <main className="flex-1 p-10 relative z-10">
+            <main className="flex-1 p-0 relative z-10">
               {children || (
                 <div className="flex flex-col items-center pt-20">
                   <h1 className="text-4xl font-bold text-white mb-4">

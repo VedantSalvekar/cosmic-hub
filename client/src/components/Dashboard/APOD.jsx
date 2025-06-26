@@ -16,12 +16,20 @@ const APOD = () => {
       setImageLoaded(false);
       
       const dateParam = date ? `&date=${date.toISOString().split('T')[0]}` : '';
-      // Using your personal API key for better reliability
-      const apiKey = 'v3BAw2DPetlkUyzpVtQuDMuaurMNwSl4QKdyCzgW';
+      // Use environment variable or fallback to DEMO_KEY
+      const apiKey = import.meta.env.VITE_NASA_API_KEY && import.meta.env.VITE_NASA_API_KEY !== 'your_nasa_api_key_here' 
+        ? import.meta.env.VITE_NASA_API_KEY 
+        : 'DEMO_KEY';
+      console.log('NASA APOD API URL:', `https://api.nasa.gov/planetary/apod?api_key=${apiKey}${dateParam}`);
+      console.log('Using API key:', apiKey === 'DEMO_KEY' ? 'DEMO_KEY (limited to 30 requests/hour)' : 'Personal API key');
+      
       const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}${dateParam}`);
       
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        if (response.status === 429) {
+          throw new Error(`API Rate limit exceeded. ${apiKey === 'DEMO_KEY' ? 'DEMO_KEY is limited to 30 requests/hour. Please add your personal NASA API key to .env file.' : 'Please wait before making more requests.'}`);
+        }
+        throw new Error(`NASA API Error: ${response.status} ${response.statusText}`);
       }
       
       const data = await response.json();
@@ -59,7 +67,7 @@ const APOD = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-black via-indigo-950 to-black flex items-center justify-center text-white">
+      <div className="min-h-screen flex items-center justify-center text-white">
         <div className="text-center space-y-4">
           <Loader2 className="w-12 h-12 animate-spin mx-auto text-cyan-400" />
           <p className="text-lg">Loading Cosmic Discovery...</p>
@@ -70,7 +78,7 @@ const APOD = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-black via-indigo-950 to-black flex flex-col items-center justify-center text-white text-center p-6">
+      <div className="min-h-screen flex flex-col items-center justify-center text-white text-center p-6">
         <AlertCircle className="w-16 h-16 text-red-500 mb-4" />
         <h2 className="text-2xl font-bold mb-2">Unable to Load APOD</h2>
         <p className="text-gray-300 mb-2">We encountered an error while fetching the astronomy picture.</p>
@@ -86,18 +94,7 @@ const APOD = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-indigo-950 to-black text-white">
-      {/* Starry background */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-10 left-10 w-1 h-1 bg-white rounded-full animate-pulse"></div>
-        <div className="absolute top-20 right-20 w-1 h-1 bg-blue-300 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-        <div className="absolute top-40 left-1/4 w-1 h-1 bg-purple-300 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
-        <div className="absolute top-60 right-1/3 w-1 h-1 bg-cyan-300 rounded-full animate-pulse" style={{animationDelay: '1.5s'}}></div>
-        <div className="absolute bottom-40 left-20 w-1 h-1 bg-white rounded-full animate-pulse" style={{animationDelay: '2s'}}></div>
-        <div className="absolute bottom-60 right-10 w-1 h-1 bg-blue-300 rounded-full animate-pulse" style={{animationDelay: '0.8s'}}></div>
-        <div className="absolute bottom-20 left-1/3 w-1 h-1 bg-purple-300 rounded-full animate-pulse" style={{animationDelay: '1.2s'}}></div>
-      </div>
-
+    <div className="min-h-screen text-white">
       <div className="relative z-10 px-4 py-10">
         <div className="max-w-5xl mx-auto space-y-12">
 
