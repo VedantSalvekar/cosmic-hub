@@ -31,15 +31,15 @@ const Layout = ({ children }) => {
     return () => clearInterval(timer);
   }, []);
 
-  const formatUTCTime = (date) => {
-    return date.toUTCString().slice(17, 25);
-  };
+  // const formatUTCTime = (date) => {
+  //   return date.toUTCString().slice(17, 25);
+  // };
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Home },
     { id: 'apod', label: 'APOD', icon: Camera },
     { id: 'asteroids', label: 'Asteroid Watch', icon: Target },
-    { id: 'events', label: 'Events', icon: Calendar }
+    // { id: 'events', label: 'Events', icon: Calendar }
   ];
 
   return (
@@ -57,7 +57,7 @@ const Layout = ({ children }) => {
           }}
         >
           <div className="text-sm font-semibold tracking-wide">
-            {formatUTCTime(currentTime)} UTC
+            {currentTime.toLocaleTimeString()} UTC
           </div>
           <div className="text-xs text-white/60 italic">
             Dublin, Ireland
@@ -193,7 +193,7 @@ const Layout = ({ children }) => {
           ) : (
             <main className="flex-1 p-0 relative z-10">
               {children || (
-                <div className="flex flex-col items-center pt-20">
+                <div className="flex flex-col items-center pt-10">
                   <h1 className="text-4xl font-bold text-white mb-4">
                     Welcome to Cosmic Hub
                   </h1>
