@@ -1,4 +1,4 @@
-# Cosmic Awareness Hub
+# Cosmic Hub
 
 > Your Personal Mission Control for Earth's Cosmic Neighborhood
 
@@ -42,7 +42,7 @@ A full-stack React and Node.js application that integrates with NASA's APIs to p
 
 ```bash
 git clone <repository-url>
-cd cosmic-awareness-hub
+cd cosmic-hub
 npm install
 cd api && npm install && cd ..
 ```
@@ -73,7 +73,7 @@ npm run dev
 ## Project Structure
 
 ```
-cosmic-awareness-hub/
+cosmic-hub/
 ├── src/                    # Frontend React app
 │   ├── components/
 │   │   └── Dashboard/      # Main dashboard components
@@ -152,10 +152,14 @@ npm run install:all      # Install all dependencies
 ### Vercel (Recommended)
 
 1. Connect your GitHub repository to Vercel
-2. Set environment variables in Vercel dashboard
+2. Set environment variables in Vercel dashboard:
+   - `NASA_API_KEY=your_nasa_api_key`
+   - `OPENAI_API_KEY=your_openai_key` (optional)
 3. Deploy automatically
 
 The `vercel.json` configuration handles both frontend and serverless API deployment.
+
+**Having deployment issues?** See [DEPLOYMENT.md](DEPLOYMENT.md) for troubleshooting guide.
 
 ## License
 

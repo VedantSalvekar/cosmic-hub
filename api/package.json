@@ -1,7 +1,7 @@
 {
-  "name": "cosmic-awareness-hub-backend",
+  "name": "cosmic-hub-backend",
   "version": "1.0.0",
-  "description": "Node.js/Express backend for Cosmic Awareness Hub - NASA API integration server",
+  "description": "Node.js/Express backend for Cosmic Hub - NASA API integration server",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

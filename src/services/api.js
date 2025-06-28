@@ -1,6 +1,8 @@
 // API Client for Cosmic Hub Backend
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (
-  typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3001'
+  typeof window !== 'undefined' && window.location.hostname !== 'localhost' 
+    ? window.location.origin 
+    : 'http://localhost:3001'
 );
 
 class ApiClient {
@@ -21,6 +23,14 @@ class ApiClient {
         },
         ...options,
       });
+
+      // Check if response is JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        console.error('❌ Non-JSON response:', text);
+        throw new Error(`Expected JSON response but got: ${contentType}. Response: ${text.substring(0, 200)}...`);
+      }
 
       const data = await response.json();
 

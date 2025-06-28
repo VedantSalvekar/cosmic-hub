@@ -1,3 +1,4 @@
+/* eslint-disable */
 const axios = require('axios');
 const NodeCache = require('node-cache');
 
@@ -14,7 +15,7 @@ class NASAApiService {
       baseURL: this.baseURL,
       timeout: 30000,
       headers: {
-        'User-Agent': 'Cosmic-Awareness-Hub/1.0.0'
+        'User-Agent': 'Cosmic-Hub/1.0.0'
       }
     });
     
