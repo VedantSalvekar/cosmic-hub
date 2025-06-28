@@ -1,351 +1,168 @@
-# 🌌 Cosmic Awareness Hub
+# Cosmic Awareness Hub
 
 > Your Personal Mission Control for Earth's Cosmic Neighborhood
 
-A modern React and Node.js application that transforms NASA's open APIs into an immersive space exploration experience. Track asteroids, explore daily cosmic discoveries, and monitor Earth's relationship with near-Earth objects through beautiful visualizations and real-time data.
+A full-stack React and Node.js application that integrates with NASA's APIs to provide real-time space data visualization, asteroid tracking, and daily astronomy content.
 
-## ✨ Features
+## Features
 
-### 📊 **Mission Control Dashboard**
+- **Real-time Asteroid Tracking** - Monitor near-Earth objects with threat assessment
+- **Daily Space Content** - Astronomy Picture of the Day (APOD) showcase
+- **3D Solar System Visualization** - Interactive Three.js solar system
+- **AI Assistant** - OpenAI-powered space exploration helper
+- **Responsive Design** - Modern UI with Tailwind CSS
 
-- Real-time asteroid tracking with threat assessment
-- Daily Astronomy Picture of the Day (APOD) showcase
-- Live fireball event monitoring
-- Comprehensive space data visualization
+## Tech Stack
 
-### 🛡️ **Asteroid Watch Center**
+**Frontend:**
 
-- Today's approaching asteroids with risk analysis
-- Potentially hazardous asteroid alerts
-- Historical close approach data
-- Interactive 3D solar system visualization
+- React 18 + Vite
+- Three.js for 3D visualizations
+- Tailwind CSS + Framer Motion
+- React Router + Recharts
 
-### 🔥 **Impact Events Monitor**
+**Backend:**
 
-- Recent fireball atmospheric entries
-- Energy analysis and impact comparisons
-- Global fireball activity mapping
-- Statistical trend analysis
+- Node.js + Express.js
+- NASA API integration with caching
+- OpenAI API integration
+- CORS, Helmet, Morgan middleware
 
-### 🎓 **Educational Features**
-
-- AI-powered content recommendations
-- Interactive learning paths
-- Cosmic event calendar
-- Personal discovery tracking
-
-## 🛠️ Tech Stack
-
-### Frontend
-
-- **React 18** with modern hooks
-- **Vite** for lightning-fast development
-- **Tailwind CSS** for styling
-- **Three.js** for 3D visualizations
-- **Framer Motion** for smooth animations
-- **Recharts** for data visualization
-- **React Router** for navigation
-
-### Backend
-
-- **Node.js** with **Express.js**
-- **Axios** for NASA API integration
-- **Node-cache** for performance optimization
-- **Helmet** for security
-- **Morgan** for logging
-- **CORS** for cross-origin requests
-
-### NASA APIs
-
-- **APOD** - Astronomy Picture of the Day
-- **NeoWs** - Near Earth Object Web Service
-- **SSD/CNEOS** - Solar System Dynamics & Close Approach Data
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
 - Node.js 18+
-- npm 8+
-- NASA API key (get from https://api.nasa.gov/)
+- NASA API key from [api.nasa.gov](https://api.nasa.gov/)
+- OpenAI API key (optional, for AI assistant)
 
 ### Installation
 
 1. **Clone and install dependencies:**
 
 ```bash
+git clone <repository-url>
 cd cosmic-awareness-hub
-npm run install:all
+npm install
+cd api && npm install && cd ..
 ```
 
-2. **Set up environment variables:**
+2. **Environment Setup:**
 
-   **Backend** (`backend/.env`):
+Create `api/.env`:
 
-   ```env
-   # NASA API Configuration
-   NASA_API_KEY=your_nasa_api_key_here
-   NASA_BASE_URL=https://api.nasa.gov
+```env
+NASA_API_KEY=your_nasa_api_key_here
+OPENAI_API_KEY=your_openai_api_key_here
+PORT=3001
+```
 
-   # Server Configuration
-   PORT=3001
-   NODE_ENV=development
-   CLIENT_URL=http://localhost:5173
-
-   # Cache Configuration
-   CACHE_TTL=3600
-   ```
-
-   **Frontend** (`frontend/.env`):
-
-   ```env
-   # Backend API URL
-   VITE_API_BASE_URL=http://localhost:3001
-   ```
-
-3. **Start development servers:**
+3. **Start Development:**
 
 ```bash
+# Terminal 1 - Start backend
+cd api && npm run dev
+
+# Terminal 2 - Start frontend
 npm run dev
 ```
 
-This will start:
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:3001
 
-- **Backend API** at `http://localhost:3001`
-- **Frontend** at `http://localhost:5173`
-
-The frontend will automatically connect to the backend API for all NASA data requests.
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 cosmic-awareness-hub/
-├── frontend/               # React frontend
-│   ├── src/
-│   │   ├── components/     # React components
-│   │   ├── services/       # API client services
-│   │   └── styles/         # CSS styles
-│   ├── public/             # Static assets
-│   └── package.json
-├── backend/                # Node.js/Express backend
+├── src/                    # Frontend React app
+│   ├── components/
+│   │   └── Dashboard/      # Main dashboard components
+│   ├── services/           # API client services
+│   ├── App.jsx
+│   └── main.jsx
+├── api/                    # Backend Express server
 │   ├── routes/             # API route handlers
-│   │   ├── health.js       # Health check endpoints
-│   │   ├── apod.js         # APOD API routes
-│   │   └── asteroids.js    # Asteroid API routes
-│   ├── services/           # NASA API services
+│   │   ├── apod.js         # APOD endpoints
+│   │   ├── asteroids.js    # Asteroid endpoints
+│   │   ├── cosmicai.js     # AI assistant endpoints
+│   │   └── health.js       # Health check
+│   ├── services/
 │   │   └── nasaApi.js      # NASA API client with caching
-│   ├── server.js           # Express server entry point
-│   ├── package.json        # Backend dependencies
-│   └── .env               # Environment variables
-├── docs/                   # Documentation
-└── README.md
+│   ├── server.js           # Express server
+│   └── package.json
+├── public/                 # Static assets
+├── package.json            # Frontend dependencies
+├── vite.config.js          # Vite config with API proxy
+└── tailwind.config.js
 ```
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### APOD (Astronomy Picture of the Day)
 
 - `GET /api/apod` - Today's APOD
-- `GET /api/apod/date/:date` - APOD for specific date
-- `GET /api/apod/range?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD` - Date range
+- `GET /api/apod/date/:date` - Specific date
 - `GET /api/apod/random?count=5` - Random APODs
-- `GET /api/apod/recent` - Last 7 days
 
 ### Asteroids (Near Earth Objects)
 
-- `GET /api/asteroids/feed?start_date=YYYY-MM-DD&end_date=YYYY-MM-DD` - Asteroid feed
 - `GET /api/asteroids/today` - Today's approaching asteroids
-- `GET /api/asteroids/:asteroidId` - Specific asteroid details
-- `GET /api/asteroids/browse/all?page=0&size=20` - Browse all asteroids
-- `GET /api/asteroids/hazardous/list?days=30` - Potentially hazardous asteroids
+- `GET /api/asteroids/feed` - Asteroid feed with date range
+- `GET /api/asteroids/:id` - Specific asteroid details
 
-### SSD/CNEOS (Solar System Dynamics)
+### AI Assistant
 
-- `GET /api/ssd/close-approach` - Close approach data
-- `GET /api/ssd/upcoming?days=30` - Upcoming close approaches
-- `GET /api/ssd/fireballs` - Fireball events
-- `GET /api/ssd/fireballs/recent?days=7` - Recent fireballs
-- `GET /api/ssd/fireballs/stats?days=365` - Fireball statistics
+- `POST /api/cosmicai/ask` - Ask space-related questions
 
 ### System
 
 - `GET /api/health` - API health check
 
-## 🎨 Key Components
-
-### Frontend Components
-
-- **Dashboard** - Mission control interface
-- **APODViewer** - Daily space imagery showcase
-- **AsteroidTracker** - Real-time asteroid monitoring
-- **SolarSystemViewer** - 3D interactive solar system
-- **FireballMonitor** - Atmospheric impact events
-- **Calendar** - Cosmic events timeline
-
-### Backend Services
-
-- **nasaApi.js** - NASA API integration with caching
-- **apod.js** - APOD route handlers
-- **asteroids.js** - Asteroid data processing
-- **ssd.js** - Close approach and fireball data
-
-## 🚀 Deployment
-
-### **Vercel (Recommended)**
-
-1. Fork this repository
-2. Connect to Vercel
-3. Set environment variables:
-   - `NASA_API_KEY`: Your NASA API key
-   - `OPENAI_API_KEY`: Your OpenAI API key (for AI assistant)
-4. Deploy automatically with `vercel.json` configuration
-
-### **Render**
-
-1. Connect repository to Render
-2. Use `render.yaml` for configuration
-3. Set NASA_API_KEY environment variable
-4. Deploy both frontend and backend services
-
-### **Netlify**
-
-1. Connect repository to Netlify
-2. Use `netlify.toml` configuration
-3. Set build command: `npm run frontend:build`
-4. Set publish directory: `frontend/dist`
-
-## 🔧 Development Scripts
+## Development Scripts
 
 ```bash
-# Development
-npm run dev              # Start both client and server
-npm run backend:dev      # Start only backend
-npm run frontend:dev     # Start only frontend
+# Frontend
+npm run dev              # Start frontend dev server
+npm run build            # Build for production
+npm run preview          # Preview production build
 
-# Production
-npm run backend:start    # Start backend in production
-npm run frontend:build   # Build frontend for production
-npm run frontend:preview # Preview production build
+# Backend
+cd api
+npm run dev              # Start backend with nodemon
+npm start                # Start backend in production
 
-# Utilities
-npm run install:all      # Install all dependencies
-npm run lint            # Run ESLint on frontend
-npm run test            # Run tests (when implemented)
-npm run client:build     # Build client for production
-npm run server:start     # Start production server
-
-# Setup
+# Both
 npm run install:all      # Install all dependencies
 ```
 
-## 🚀 Deployment
-
-### Frontend (Vercel)
-
-1. Connect your GitHub repository to Vercel
-2. Set build command: `cd client && npm run build`
-3. Set output directory: `client/dist`
-4. Deploy automatically on push
-
-### Backend (Render/Railway)
-
-1. Connect your GitHub repository
-2. Set build command: `cd server && npm install`
-3. Set start command: `cd server && npm start`
-4. Add environment variables in dashboard
-
-## 🔒 Environment Variables
+## Environment Variables
 
 ### Required
 
 - `NASA_API_KEY` - Your NASA API key
-- `NASA_BASE_URL` - NASA API base URL
-- `CLIENT_URL` - Frontend URL for CORS
 
 ### Optional
 
-- `PORT` - Server port (default: 5000)
-- `NODE_ENV` - Environment (development/production)
-- `CACHE_TTL` - Cache duration in seconds (default: 3600)
+- `OPENAI_API_KEY` - For AI assistant functionality
+- `PORT` - Backend port (default: 3001)
+- `NODE_ENV` - Environment mode
 
-## 🧪 API Usage Examples
+## Deployment
 
-### Get Today's APOD
+### Vercel (Recommended)
 
-```javascript
-const response = await fetch("/api/apod");
-const apod = await response.json();
-console.log(apod.data.title, apod.data.url);
-```
+1. Connect your GitHub repository to Vercel
+2. Set environment variables in Vercel dashboard
+3. Deploy automatically
 
-### Get Today's Asteroids
+The `vercel.json` configuration handles both frontend and serverless API deployment.
 
-```javascript
-const response = await fetch("/api/asteroids/today");
-const asteroids = await response.json();
-console.log(`${asteroids.count} asteroids approaching today`);
-```
+## License
 
-### Get Recent Fireballs
+ISC License - see [LICENSE](LICENSE) file for details.
 
-```javascript
-const response = await fetch("/api/ssd/fireballs/recent");
-const fireballs = await response.json();
-console.log(`${fireballs.count} recent fireball events`);
-```
+## Acknowledgments
 
-## 🎯 Features Roadmap
-
-### Phase 1 (Current)
-
-- ✅ Basic dashboard with APOD
-- ✅ Asteroid tracking system
-- ✅ Fireball monitoring
-- ✅ REST API with caching
-
-### Phase 2 (Next)
-
-- 🔄 3D solar system visualization
-- 🔄 Interactive calendar
-- 🔄 Mobile responsive design
-- 🔄 Real-time notifications
-
-### Phase 3 (Future)
-
-- 📋 AI-powered recommendations
-- 📋 User accounts and favorites
-- 📋 Social sharing features
-- 📋 Advanced data analytics
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **NASA** for providing amazing open APIs
-- **React** and **Node.js** communities
-- **Three.js** for 3D visualization capabilities
-- **Tailwind CSS** for beautiful styling
-
-## 📞 Support
-
-If you encounter any issues or have questions:
-
-1. Check the [API documentation](#-api-endpoints)
-2. Review common issues in [troubleshooting](#troubleshooting)
-3. Open an issue on GitHub
-
----
-
-**Built with ❤️ for space enthusiasts and developers**
-
-_Explore the cosmos from your browser_ 🚀
+- NASA for providing open APIs
+- OpenAI for AI integration
+- React, Node.js, and Three.js communities
