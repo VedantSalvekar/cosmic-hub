@@ -8,6 +8,7 @@ require('dotenv').config();
 const apodRoutes = require('./routes/apod');
 const asteroidRoutes = require('./routes/asteroids');
 const healthRoutes = require('./routes/health');
+const cosmicaiRoutes = require('./routes/cosmicai');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -44,6 +45,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/health', healthRoutes);
 app.use('/api/apod', apodRoutes);
 app.use('/api/asteroids', asteroidRoutes);
+app.use('/api/cosmicai', cosmicaiRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -53,7 +55,8 @@ app.get('/', (req, res) => {
     endpoints: {
       health: '/api/health',
       apod: '/api/apod',
-      asteroids: '/api/asteroids'
+      asteroids: '/api/asteroids',
+      cosmicai: '/api/cosmicai'
     },
     documentation: 'See README.md for full API documentation'
   });

@@ -17,11 +17,14 @@ import Footer from './Footer';
 import FloatingMenuButton from './FloatingMenuButton';
 import APOD from './APOD';
 import AsteroidWatch from './AsteroidWatch';
+import FloatingAIButton from './FloatingAIButton';
+import CosmicAIAssistant from './CosmicAIAssistant';
 
 const Layout = ({ children }) => {
   const [activeSection, setActiveSection] = useState('dashboard');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
 
   // Update time every second
   React.useEffect(() => {
@@ -205,6 +208,14 @@ const Layout = ({ children }) => {
               )}
             </main>
           )}
+          {/* Floating AI Button */}
+          <FloatingAIButton onClick={() => setIsAIAssistantOpen(true)} />
+
+          {/* Cosmic AI Assistant */}
+          <CosmicAIAssistant 
+            isOpen={isAIAssistantOpen}
+            onClose={() => setIsAIAssistantOpen(false)}
+          />
           
           {/* Footer with higher z-index */}
           <div className="relative z-20">

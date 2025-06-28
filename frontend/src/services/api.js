@@ -100,6 +100,18 @@ class ApiClient {
     const endpoint = '/api/health/deep';
     return await this.request(endpoint);
   }
+  async askCosmicAI(question){
+    const endpoint = '/api/cosmicai/ask';
+    const response = await this.request(endpoint,{
+      method: 'POST',
+      body: JSON.stringify({question})
+    });
+    return response.data;
+  }
+  async getCosmicAIHealth(){
+    const endpoint = '/api/cosmicai/health';
+    return await this.request(endpoint);
+  }
 }
 
 export default new ApiClient(); 
