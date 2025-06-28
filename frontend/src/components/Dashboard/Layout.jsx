@@ -9,7 +9,8 @@ import {
   Calendar, 
   Telescope, 
   Globe, 
-  Settings 
+  Settings,
+  Lightbulb 
 } from 'lucide-react';
 import { Sidebar, Menu as ProMenu, MenuItem } from 'react-pro-sidebar';
 import SolarSystemBackground from './SolarSystemBackground';
@@ -25,6 +26,16 @@ const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isAIAssistantOpen, setIsAIAssistantOpen] = useState(false);
+  const [currentFact, setCurrentFact] = useState('');
+
+  // Array of space fun facts
+  const spaceFacts = [
+    "🌟 One day on Venus is longer than one year on Venus! It takes 243 Earth days to rotate once, but only 225 Earth days to orbit the Sun.",
+    "🕳️ If you fell into a black hole, time would slow down for you relative to the outside universe due to gravitational time dilation.",
+    "🌙 The Moon is gradually moving away from Earth at about 3.8 cm per year - roughly the same rate your fingernails grow!",
+    "☄️ Halley's Comet won't be visible from Earth again until 2061. It last appeared in 1986 and has an orbital period of 75-76 years.",
+    "🌌 There are more stars in the observable universe than grains of sand on all the beaches on Earth - estimated at over 10^24 stars!"
+  ];
 
   // Update time every second
   React.useEffect(() => {
@@ -32,6 +43,12 @@ const Layout = ({ children }) => {
       setCurrentTime(new Date());
     }, 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Set random fact on component mount
+  React.useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * spaceFacts.length);
+    setCurrentFact(spaceFacts[randomIndex]);
   }, []);
 
   // const formatUTCTime = (date) => {
@@ -101,11 +118,17 @@ const Layout = ({ children }) => {
           }}
         >
           {/* Sidebar Header */}
-          <div style={{ padding: '24px 20px 16px 20px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
-            <h1 className="text-xl font-bold text-white flex items-center gap-2">
-              <span className="text-2xl"></span>
-              Cosmic Hub
-            </h1>
+          <div style={{ padding: '24px 20px 20px 20px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+            <div className="flex flex-col items-center text-center space-y-3">
+              <img 
+                src="/images/cosmic_hub_logo.png" 
+                alt="Cosmic Hub Logo" 
+                className="w-32 h-32 object-contain"
+              />
+              <h1 className="text-xl font-bold text-white">
+                Cosmic Hub
+              </h1>
+            </div>
           </div>
 
           <div style={{ padding: '20px 0' }}>
@@ -168,6 +191,21 @@ const Layout = ({ children }) => {
                 );
               })}
             </ProMenu>
+          </div>
+
+          {/* Fun Facts Section */}
+          <div style={{ padding: '0 20px 20px 20px', marginTop: 'auto' }}>
+            <div className="border-t border-white/10 pt-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Lightbulb className="w-4 h-4 text-yellow-400" />
+                <h3 className="text-sm font-semibold text-white/90">Fun Facts</h3>
+              </div>
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-sm">
+                <p className="text-xs text-white/80 leading-relaxed">
+                  {currentFact}
+                </p>
+              </div>
+            </div>
           </div>
         </Sidebar>
       </div>

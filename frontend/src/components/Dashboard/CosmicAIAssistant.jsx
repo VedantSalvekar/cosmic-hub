@@ -63,7 +63,7 @@ const CosmicAIAssistant = ({ isOpen, onClose }) => {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-white/80 mb-2">
-                Ask me about space, astronomy, or cosmic phenomena! 🌌
+                Ask me about space, astronomy, or cosmic phenomena! 
               </label>
               <textarea
                 value={question}

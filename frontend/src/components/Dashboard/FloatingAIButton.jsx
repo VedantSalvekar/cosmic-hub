@@ -44,7 +44,7 @@ const FloatingAIButton = ({ onClick }) => {
         
         {/* Regular hover tooltip */}
         <div className="absolute bottom-full left-0 mb-2 px-3 py-1 bg-black/80 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-          Ask Cosmic AI 💬
+          Ask Cosmic AI 
           <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black/80"></div>
         </div>
       </button>
