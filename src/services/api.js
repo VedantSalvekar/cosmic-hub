@@ -1,8 +1,8 @@
 // API Client for Cosmic Hub Backend
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (
-  typeof window !== 'undefined' && window.location.hostname !== 'localhost' 
-    ? window.location.origin 
-    : 'http://localhost:3001'
+  typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+    ? '' // Use relative URLs for localhost to go through Vite proxy
+    : window.location.origin 
 );
 
 class ApiClient {

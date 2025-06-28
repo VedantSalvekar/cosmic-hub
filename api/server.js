@@ -2,15 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-require('dotenv').config();
+const dotenv = require('dotenv');
 
-// Import routes
-const apodRoutes = require('./routes/apod');
-const asteroidRoutes = require('./routes/asteroids');
-const healthRoutes = require('./routes/health');
-const cosmicaiRoutes = require('./routes/cosmicai');
+// Load environment variables
+dotenv.config();
 
 const app = express();
+const port = process.env.PORT || 3001;
 
 // Security middleware
 app.use(helmet({
@@ -27,37 +25,43 @@ app.use(helmet({
 
 // CORS configuration
 app.use(cors({
-  origin: true,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: process.env.NODE_ENV === 'production' 
+    ? [process.env.FRONTEND_URL, 'https://cosmic-hub.vercel.app', 'https://cosmic-hub-git-main-vedantsalvekar.vercel.app']
+    : ['http://localhost:5173', 'http://localhost:3000'],
+  credentials: true
 }));
 
-// Logging middleware
+// Logging
 app.use(morgan('combined'));
 
 // Body parsing middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// API Routes
+// Import routes
+const healthRoutes = require('./routes/health');
+const apodRoutes = require('./routes/apod');
+const asteroidsRoutes = require('./routes/asteroids');
+const cosmicaiRoutes = require('./routes/cosmicai');
+
+// Use routes
 app.use('/api/health', healthRoutes);
 app.use('/api/apod', apodRoutes);
-app.use('/api/asteroids', asteroidRoutes);
+app.use('/api/asteroids', asteroidsRoutes);
 app.use('/api/cosmicai', cosmicaiRoutes);
 
 // Root endpoint
-app.get('/api', (req, res) => {
+app.get('/', (req, res) => {
   res.json({
-    message: 'Cosmic Hub - NASA API Backend',
+    message: 'Cosmic Hub API Server',
     version: '1.0.0',
+    status: 'running',
     endpoints: {
       health: '/api/health',
       apod: '/api/apod',
       asteroids: '/api/asteroids',
       cosmicai: '/api/cosmicai'
-    },
-    documentation: 'See README.md for full API documentation'
+    }
   });
 });
 
@@ -65,29 +69,27 @@ app.get('/api', (req, res) => {
 app.use('*', (req, res) => {
   res.status(404).json({
     error: 'Endpoint not found',
-    message: `The requested endpoint ${req.originalUrl} does not exist`,
-    availableEndpoints: ['/api/health', '/api/apod', '/api/asteroids']
+    message: `The endpoint ${req.originalUrl} does not exist`
   });
 });
 
 // Global error handler
-app.use((err, req, res, next) => {
-  console.error('Global error handler:', err);
-  res.status(err.status || 500).json({
+app.use((error, req, res, next) => {
+  console.error('Global error handler:', error);
+  res.status(500).json({
     error: 'Internal server error',
-    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    message: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'
   });
 });
 
-// Start server if this file is run directly
+// Start server
 if (require.main === module) {
-  const PORT = process.env.PORT || 3001;
-  app.listen(PORT, () => {
-    console.log(`🚀 Cosmic Hub Backend running on port ${PORT}`);
-    console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-    console.log(`🛰️  NASA API Key: ${process.env.NASA_API_KEY ? 'Configured' : 'Not configured'}`);
-    console.log(`📡 Server ready to proxy NASA API requests`);
+  app.listen(port, () => {
+    console.log(`🚀 Cosmic Hub API Server running on port ${port}`);
+    console.log(`📡 Health check: http://localhost:${port}/api/health`);
+    console.log(`🌌 APOD endpoint: http://localhost:${port}/api/apod`);
+    console.log(`☄️  Asteroids endpoint: http://localhost:${port}/api/asteroids`);
+    console.log(`🤖 Cosmic AI endpoint: http://localhost:${port}/api/cosmicai`);
   });
 }
 
