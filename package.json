@@ -14,7 +14,7 @@
     "frontend:preview": "cd frontend && npm run preview",
     "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
     "lint": "cd frontend && npm run lint",
-    "test": "echo \"Tests not implemented yet\" && exit 0"
+    "test": "cd backend && npm test"
   },
   "keywords": [
     "cosmic",

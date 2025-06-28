@@ -189,15 +189,48 @@ cosmic-awareness-hub/
 - **asteroids.js** - Asteroid data processing
 - **ssd.js** - Close approach and fireball data
 
+## 🚀 Deployment
+
+### **Vercel (Recommended)**
+
+1. Fork this repository
+2. Connect to Vercel
+3. Set environment variables:
+   - `NASA_API_KEY`: Your NASA API key
+   - `OPENAI_API_KEY`: Your OpenAI API key (for AI assistant)
+4. Deploy automatically with `vercel.json` configuration
+
+### **Render**
+
+1. Connect repository to Render
+2. Use `render.yaml` for configuration
+3. Set NASA_API_KEY environment variable
+4. Deploy both frontend and backend services
+
+### **Netlify**
+
+1. Connect repository to Netlify
+2. Use `netlify.toml` configuration
+3. Set build command: `npm run frontend:build`
+4. Set publish directory: `frontend/dist`
+
 ## 🔧 Development Scripts
 
 ```bash
 # Development
 npm run dev              # Start both client and server
-npm run client:dev       # Start only client
-npm run server:dev       # Start only server
+npm run backend:dev      # Start only backend
+npm run frontend:dev     # Start only frontend
 
 # Production
+npm run backend:start    # Start backend in production
+npm run frontend:build   # Build frontend for production
+npm run frontend:preview # Preview production build
+
+# Utilities
+npm run install:all      # Install all dependencies
+npm run lint            # Run ESLint on frontend
+npm run test            # Run tests (when implemented)
 npm run client:build     # Build client for production
 npm run server:start     # Start production server
 
