@@ -11,6 +11,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
+import apiClient from '../../../services/api';
 
 const HistoricalAnalysis = () => {
   const [historicalData, setHistoricalData] = useState([]);
@@ -26,105 +27,100 @@ const HistoricalAnalysis = () => {
     try {
       console.log(`Fetching historical asteroid data for ${selectedYear}...`);
       
-      const events = [];
-                   // Using backend API instead of direct NASA calls
-      console.log('HistoricalAnalysis: Using backend API for NASA data');
+      // Optimize API calls: Instead of 12 monthly calls, use fewer calls with larger date ranges
+      // NASA API allows up to 7 days per call, so we'll use 7-day chunks throughout the year
+      const dateRanges = [];
       
-      // Fetch data for multiple date ranges throughout the selected year
-      const dateRanges = [
-        { start: `${selectedYear}-01-01`, end: `${selectedYear}-01-07` },
-        { start: `${selectedYear}-02-01`, end: `${selectedYear}-02-07` },
-        { start: `${selectedYear}-03-01`, end: `${selectedYear}-03-07` },
-        { start: `${selectedYear}-04-01`, end: `${selectedYear}-04-07` },
-        { start: `${selectedYear}-05-01`, end: `${selectedYear}-05-07` },
-        { start: `${selectedYear}-06-01`, end: `${selectedYear}-06-07` },
-        { start: `${selectedYear}-07-01`, end: `${selectedYear}-07-07` },
-        { start: `${selectedYear}-08-01`, end: `${selectedYear}-08-07` },
-        { start: `${selectedYear}-09-01`, end: `${selectedYear}-09-07` },
-        { start: `${selectedYear}-10-01`, end: `${selectedYear}-10-07` },
-        { start: `${selectedYear}-11-01`, end: `${selectedYear}-11-07` },
-        { start: `${selectedYear}-12-01`, end: `${selectedYear}-12-07` }
-      ];
-      
-      // Fetch data for each date range
-      for (const range of dateRanges) {
-        try {
-                               // Using backend API instead of direct NASA API call
-          const backendUrl = `http://localhost:3001/api/asteroids/feed?start_date=${range.start}&end_date=${range.end}`;
-          console.log(`Fetching from backend: ${backendUrl}`);
-          
-          const response = await fetch(backendUrl);
-           
-           if (response.status === 429) {
-             console.warn(`Rate limit exceeded for range ${range.start} to ${range.end}`);
-             break; // Stop fetching more ranges if rate limited
-           }
-           
-           if (response.ok) {
-            const responseData = await response.json();
-            const data = responseData.data; // Backend wraps data in success/data structure
-            
-            if (data && data.near_earth_objects) {
-              // Process each date's data
-              Object.keys(data.near_earth_objects).forEach(date => {
-                const asteroidsForDate = data.near_earth_objects[date];
-                
-                asteroidsForDate.forEach((asteroid) => {
-                  const closeApproach = asteroid.close_approach_data[0];
-                  if (!closeApproach) return;
-                  
-                  const distance_au = parseFloat(closeApproach.miss_distance.astronomical);
-                  const distance_ld = parseFloat(closeApproach.miss_distance.lunar);
-                  const distance_km = parseFloat(closeApproach.miss_distance.kilometers);
-                  const velocity_kms = parseFloat(closeApproach.relative_velocity.kilometers_per_second);
-                  
-                  const diameter_min = parseFloat(asteroid.estimated_diameter.meters.estimated_diameter_min);
-                  const diameter_max = parseFloat(asteroid.estimated_diameter.meters.estimated_diameter_max);
-                  const avgDiameter = (diameter_min + diameter_max) / 2;
-                  
-                  // Determine significance based on distance and size
-                  let significance = 'low';
-                  if (asteroid.is_potentially_hazardous_asteroid) {
-                    if (distance_au < 0.02 && avgDiameter > 1000) significance = 'high';
-                    else if (distance_au < 0.05 || avgDiameter > 500) significance = 'medium';
-                  } else if (distance_au < 0.1 && avgDiameter > 100) {
-                    significance = 'medium';
-                  }
-                  
-                  events.push({
-                    id: `nasa_${asteroid.id}_${date}`,
-                    name: asteroid.name.replace(/[()]/g, ''),
-                    fullName: asteroid.name,
-                    date: closeApproach.close_approach_date_full,
-                    year: selectedYear,
-                    distance: {
-                      au: distance_au.toFixed(6),
-                      ld: distance_ld.toFixed(2),
-                      km: distance_km.toFixed(0)
-                    },
-                    diameter: Math.round(avgDiameter),
-                    velocity: velocity_kms.toFixed(2),
-                    magnitude: asteroid.absolute_magnitude_h.toFixed(1),
-                    significance,
-                    isPotentiallyHazardous: asteroid.is_potentially_hazardous_asteroid,
-                    nasaJplUrl: asteroid.nasa_jpl_url,
-                    orbitingBody: closeApproach.orbiting_body
-                  });
-                });
-              });
-            }
-          }
-          
-          // Add delay between requests to avoid rate limiting
-          await new Promise(resolve => setTimeout(resolve, 200));
-          
-        } catch (rangeError) {
-          console.warn(`Failed to fetch data for range ${range.start} to ${range.end}:`, rangeError);
-        }
+      // Create 7-day date ranges throughout the year (sample every ~2 weeks)
+      for (let month = 0; month < 12; month += 2) { // Every 2 months
+        const startDate = new Date(selectedYear, month, 1);
+        const endDate = new Date(selectedYear, month, 7);
+        
+        dateRanges.push({
+          start: startDate.toISOString().split('T')[0],
+          end: endDate.toISOString().split('T')[0]
+        });
       }
       
+      console.log(`Making ${dateRanges.length} API calls instead of 12...`);
+      
+      // Use Promise.all to make concurrent API calls instead of sequential
+      const apiPromises = dateRanges.map(async (range) => {
+        try {
+          console.log(`Fetching data for range ${range.start} to ${range.end}`);
+          
+          // Use the proper API client instead of hardcoded localhost
+          const data = await apiClient.getAsteroidFeed(range.start, range.end);
+          
+          if (data && data.near_earth_objects) {
+            const rangeEvents = [];
+            
+            // Process each date's data
+            Object.keys(data.near_earth_objects).forEach(date => {
+              const asteroidsForDate = data.near_earth_objects[date];
+              
+              asteroidsForDate.forEach((asteroid) => {
+                const closeApproach = asteroid.close_approach_data[0];
+                if (!closeApproach) return;
+                
+                const distance_au = parseFloat(closeApproach.miss_distance.astronomical);
+                const distance_ld = parseFloat(closeApproach.miss_distance.lunar);
+                const distance_km = parseFloat(closeApproach.miss_distance.kilometers);
+                const velocity_kms = parseFloat(closeApproach.relative_velocity.kilometers_per_second);
+                
+                const diameter_min = parseFloat(asteroid.estimated_diameter.meters.estimated_diameter_min);
+                const diameter_max = parseFloat(asteroid.estimated_diameter.meters.estimated_diameter_max);
+                const avgDiameter = (diameter_min + diameter_max) / 2;
+                
+                // Determine significance based on distance and size
+                let significance = 'low';
+                if (asteroid.is_potentially_hazardous_asteroid) {
+                  if (distance_au < 0.02 && avgDiameter > 1000) significance = 'high';
+                  else if (distance_au < 0.05 || avgDiameter > 500) significance = 'medium';
+                } else if (distance_au < 0.1 && avgDiameter > 100) {
+                  significance = 'medium';
+                }
+                
+                rangeEvents.push({
+                  id: `nasa_${asteroid.id}_${date}`,
+                  name: asteroid.name.replace(/[()]/g, ''),
+                  fullName: asteroid.name,
+                  date: closeApproach.close_approach_date_full,
+                  year: selectedYear,
+                  distance: {
+                    au: distance_au.toFixed(6),
+                    ld: distance_ld.toFixed(2),
+                    km: distance_km.toFixed(0)
+                  },
+                  diameter: Math.round(avgDiameter),
+                  velocity: velocity_kms.toFixed(2),
+                  magnitude: asteroid.absolute_magnitude_h.toFixed(1),
+                  significance,
+                  isPotentiallyHazardous: asteroid.is_potentially_hazardous_asteroid,
+                  nasaJplUrl: asteroid.nasa_jpl_url,
+                  orbitingBody: closeApproach.orbiting_body
+                });
+              });
+            });
+            
+            return rangeEvents;
+          }
+          
+          return [];
+        } catch (rangeError) {
+          console.warn(`Failed to fetch data for range ${range.start} to ${range.end}:`, rangeError);
+          return [];
+        }
+      });
+      
+      // Wait for all API calls to complete concurrently
+      const results = await Promise.all(apiPromises);
+      
+      // Flatten all events from all ranges
+      const allEvents = results.flat();
+      
       // Sort events by date (most recent first)
-      const sortedEvents = events.sort((a, b) => new Date(b.date) - new Date(a.date));
+      const sortedEvents = allEvents.sort((a, b) => new Date(b.date) - new Date(a.date));
       
       console.log(`Fetched ${sortedEvents.length} historical events for ${selectedYear}`);
       setHistoricalData(sortedEvents);
