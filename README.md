@@ -28,6 +28,12 @@ A full-stack React and Node.js application that integrates with NASA's APIs to p
 - OpenAI API integration
 - CORS, Helmet, Morgan middleware
 
+**Testing:**
+
+- Vitest for unit testing
+- React Testing Library for component testing
+- Jest for backend API testing
+
 ## Quick Start
 
 ### Prerequisites
@@ -70,6 +76,27 @@ npm run dev
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:3001
 
+## Testing
+
+Run the test suite to ensure everything works correctly:
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode (for development)
+npm run test:watch
+
+# Run backend tests
+cd api && npm test
+```
+
+**Test Coverage:**
+
+- ✅ Utility function tests (data formatting, calculations)
+- ✅ Component smoke tests (basic rendering)
+- ✅ API endpoint tests (health checks, error handling)
+
 ## Project Structure
 
 ```
@@ -78,6 +105,9 @@ cosmic-hub/
 │   ├── components/
 │   │   └── Dashboard/      # Main dashboard components
 │   ├── services/           # API client services
+│   ├── utils/              # Utility functions
+│   │   ├── formatters.js   # Data formatting utilities
+│   │   └── formatters.test.js # Unit tests
 │   ├── App.jsx
 │   └── main.jsx
 ├── api/                    # Backend Express server
@@ -125,14 +155,14 @@ cosmic-hub/
 npm run dev              # Start frontend dev server
 npm run build            # Build for production
 npm run preview          # Preview production build
+npm test                 # Run tests
+npm run test:watch       # Run tests in watch mode
 
 # Backend
 cd api
 npm run dev              # Start backend with nodemon
 npm start                # Start backend in production
-
-# Both
-npm run install:all      # Install all dependencies
+npm test                 # Run backend tests
 ```
 
 ## Environment Variables
@@ -158,8 +188,6 @@ npm run install:all      # Install all dependencies
 3. Deploy automatically
 
 The `vercel.json` configuration handles both frontend and serverless API deployment.
-
-**Having deployment issues?** See [DEPLOYMENT.md](DEPLOYMENT.md) for troubleshooting guide.
 
 ## License
 

@@ -3,6 +3,59 @@
 /* React DatePicker Styles */
 @import 'react-datepicker/dist/react-datepicker.css';
 
+/* Custom Select/Option Styling for Cross-Device Compatibility */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+/* Force dark theme for select dropdowns */
+select[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+select[data-theme="dark"] option {
+  background-color: #1f2937 !important;
+  color: white !important;
+  padding: 8px !important;
+}
+
+/* Mobile-specific fixes */
+@media (max-width: 768px) {
+  select {
+    font-size: 16px; /* Prevents zoom on iOS */
+    min-height: 44px; /* iOS touch target size */
+  }
+  
+  select option {
+    background-color: #1f2937 !important;
+    color: white !important;
+    padding: 12px 8px !important;
+  }
+}
+
+/* Webkit browsers (Safari, Chrome) */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  select option {
+    background-color: #1f2937 !important;
+    color: white !important;
+  }
+}
+
+/* Firefox specific */
+@-moz-document url-prefix() {
+  select option {
+    background-color: #1f2937 !important;
+    color: white !important;
+  }
+}
+
 /* Custom DatePicker Theme */
 .react-datepicker {
   background-color: #1f2937 !important;

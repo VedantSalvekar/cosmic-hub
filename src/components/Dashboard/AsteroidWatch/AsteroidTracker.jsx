@@ -344,12 +344,18 @@ const AsteroidTracker = () => {
               <select
                 value={filters.dateRange}
                 onChange={(e) => setFilters(prev => ({ ...prev, dateRange: parseInt(e.target.value) }))}
-                className="bg-white/5 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white"
+                className="bg-white/5 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white [&>option]:bg-gray-800 [&>option]:text-white [&>option]:py-2"
+                data-theme="dark"
+                style={{ 
+                  colorScheme: 'dark',
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  color: 'white'
+                }}
               >
-                <option value={7}>Next 7 days</option>
-                <option value={30}>Next 30 days</option>
-                <option value={60}>Next 60 days</option>
-                <option value={90}>Next 90 days</option>
+                <option value={7} style={{ backgroundColor: '#1f2937', color: 'white' }}>Next 7 days</option>
+                <option value={30} style={{ backgroundColor: '#1f2937', color: 'white' }}>Next 30 days</option>
+                <option value={60} style={{ backgroundColor: '#1f2937', color: 'white' }}>Next 60 days</option>
+                <option value={90} style={{ backgroundColor: '#1f2937', color: 'white' }}>Next 90 days</option>
               </select>
             </div>
 
@@ -358,12 +364,18 @@ const AsteroidTracker = () => {
               <select
                 value={filters.sizeCategory}
                 onChange={(e) => setFilters(prev => ({ ...prev, sizeCategory: e.target.value }))}
-                className="bg-white/5 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white"
+                className="bg-white/5 border border-white/20 rounded-lg px-3 py-1.5 text-sm text-white [&>option]:bg-gray-800 [&>option]:text-white [&>option]:py-2"
+                data-theme="dark"
+                style={{ 
+                  colorScheme: 'dark',
+                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  color: 'white'
+                }}
               >
-                <option value="all">All Sizes</option>
-                <option value="small">Small (&lt;100m)</option>
-                <option value="medium">Medium (100m-1km)</option>
-                <option value="large">Large (&gt;1km)</option>
+                <option value="all" style={{ backgroundColor: '#1f2937', color: 'white' }}>All Sizes</option>
+                <option value="small" style={{ backgroundColor: '#1f2937', color: 'white' }}>Small (&lt;100m)</option>
+                <option value="medium" style={{ backgroundColor: '#1f2937', color: 'white' }}>Medium (100m-1km)</option>
+                <option value="large" style={{ backgroundColor: '#1f2937', color: 'white' }}>Large (&gt;1km)</option>
               </select>
             </div>
 
