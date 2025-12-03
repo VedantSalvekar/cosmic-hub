@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Bot, Sparkles } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Bot, Sparkles } from "lucide-react";
 
 const FloatingAIButton = ({ onClick }) => {
   const [showDiscoveryTooltip, setShowDiscoveryTooltip] = useState(true);
@@ -8,7 +8,7 @@ const FloatingAIButton = ({ onClick }) => {
   useEffect(() => {
     const tooltipTimer = setTimeout(() => {
       setShowDiscoveryTooltip(false);
-    }, 4000);
+    }, 10000);
 
     const jumpTimer = setTimeout(() => {
       setIsJumping(false);
@@ -31,20 +31,20 @@ const FloatingAIButton = ({ onClick }) => {
       <button
         onClick={handleClick}
         className={`fixed bottom-6 left-6 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white p-4 rounded-full shadow-2xl transition-all duration-300 transform hover:scale-105 z-[9999] group ${
-          isJumping ? 'animate-bounce' : ''
+          isJumping ? "animate-bounce" : ""
         }`}
         style={{
-          boxShadow: '0 8px 32px rgba(59, 130, 246, 0.3)',
+          boxShadow: "0 8px 32px rgba(59, 130, 246, 0.3)",
         }}
       >
         <div className="relative">
           <Bot className="w-6 h-6" />
           <Sparkles className="w-3 h-3 absolute -top-1 -right-1 text-yellow-300 animate-pulse" />
         </div>
-        
+
         {/* Regular hover tooltip */}
         <div className="absolute bottom-full left-0 mb-2 px-3 py-1 bg-black/80 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-          Ask Cosmic AI 
+          Ask Cosmic AI
           <div className="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-black/80"></div>
         </div>
       </button>
@@ -58,7 +58,8 @@ const FloatingAIButton = ({ onClick }) => {
               <span className="font-semibold text-sm">New Feature!</span>
             </div>
             <p className="text-sm">
-              Chat with our Cosmic AI Assistant! 🚀<br />
+              Chat with our Cosmic AI Assistant! 🚀
+              <br />
               Ask me anything about space & astronomy!
             </p>
             <div className="absolute top-full left-8 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-blue-500"></div>

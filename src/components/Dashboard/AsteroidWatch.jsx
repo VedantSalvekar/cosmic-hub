@@ -1,29 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Target, 
-  AlertTriangle, 
   Clock, 
-  Search, 
-  Bell, 
-  Eye,
-  Calendar,
-  Zap,
   Globe,
-  Activity,
-  Info,
-  Filter,
-  TrendingUp,
-  Shield,
-  Orbit
+  Activity
 } from 'lucide-react';
 import AsteroidTracker from './AsteroidWatch/AsteroidTracker';
-import ThreatAssessment from './AsteroidWatch/ThreatAssessment';
-import HistoricalAnalysis from './AsteroidWatch/HistoricalAnalysis';
-import AsteroidProfiles from './AsteroidWatch/AsteroidProfiles';
-import AlertSystem from './AsteroidWatch/AlertSystem';
 
 const AsteroidWatch = () => {
-  const [activeTab, setActiveTab] = useState('tracker');
   const [currentTime, setCurrentTime] = useState(new Date());
 
   // Update time every second
@@ -33,58 +17,6 @@ const AsteroidWatch = () => {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
-
-  const tabs = [
-    { 
-      id: 'tracker', 
-      label: 'Live Tracker', 
-      icon: Target,
-      description: 'Real-time asteroid approaches'
-    },
-    { 
-      id: 'history', 
-      label: 'Historical Analysis', 
-      icon: Clock,
-      description: 'Past close approaches'
-    }
-    // Hidden tabs (kept in codebase for future use):
-    // { 
-    //   id: 'threats', 
-    //   label: 'Threat Assessment', 
-    //   icon: AlertTriangle,
-    //   description: 'Potentially hazardous objects'
-    // },
-    // { 
-    //   id: 'profiles', 
-    //   label: 'Asteroid Profiles', 
-    //   icon: Search,
-    //   description: 'Detailed asteroid data'
-    // },
-    // { 
-    //   id: 'alerts', 
-    //   label: 'Alert System', 
-    //   icon: Bell,
-    //   description: 'Monitoring & notifications'
-    // }
-  ];
-
-  const renderActiveComponent = () => {
-    switch (activeTab) {
-      case 'tracker':
-        return <AsteroidTracker />;
-      case 'history':
-        return <HistoricalAnalysis />;
-      // Hidden components (kept in codebase for future use):
-      // case 'threats':
-      //   return <ThreatAssessment />;
-      // case 'profiles':
-      //   return <AsteroidProfiles />;
-      // case 'alerts':
-      //   return <AlertSystem />;
-      default:
-        return <AsteroidTracker />;
-    }
-  };
 
   return (
     <div className="min-h-screen text-white p-6 space-y-6">
@@ -139,41 +71,9 @@ const AsteroidWatch = () => {
         </div>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="bg-black/20 backdrop-blur-lg rounded-2xl p-2 border border-white/10">
-        <div className="flex flex-wrap gap-2">
-          {tabs.map((tab) => {
-            const IconComponent = tab.icon;
-            const isActive = activeTab === tab.id;
-            
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`
-                  flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group
-                  ${isActive 
-                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg shadow-blue-500/25' 
-                    : 'hover:bg-white/10 text-white/70 hover:text-white'
-                  }
-                `}
-              >
-                <IconComponent className={`w-5 h-5 ${isActive ? 'text-white' : 'text-white/60 group-hover:text-white'}`} />
-                <div className="text-left hidden sm:block">
-                  <div className="font-medium">{tab.label}</div>
-                  <div className={`text-xs ${isActive ? 'text-white/80' : 'text-white/50'}`}>
-                    {tab.description}
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
       {/* Main Content Area */}
       <div className="min-h-[600px]">
-        {renderActiveComponent()}
+        <AsteroidTracker />
       </div>
     </div>
   );

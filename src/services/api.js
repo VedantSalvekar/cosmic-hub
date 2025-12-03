@@ -14,8 +14,6 @@ class ApiClient {
     const url = `${this.baseURL}${endpoint}`;
     
     try {
-      console.log(`🚀 API Request: ${options.method || 'GET'} ${url}`);
-      
       const response = await fetch(url, {
         headers: {
           'Content-Type': 'application/json',
@@ -27,9 +25,7 @@ class ApiClient {
       // Check if response is JSON
       const contentType = response.headers.get('content-type');
       if (!contentType || !contentType.includes('application/json')) {
-        const text = await response.text();
-        console.error('❌ Non-JSON response:', text);
-        throw new Error(`Expected JSON response but got: ${contentType}. Response: ${text.substring(0, 200)}...`);
+        throw new Error(`Expected JSON response but got: ${contentType}`);
       }
 
       const data = await response.json();
@@ -38,10 +34,9 @@ class ApiClient {
         throw new Error(data.error || `HTTP error! status: ${response.status}`);
       }
 
-      console.log(`✅ API Response: ${response.status} ${url}`);
       return data;
     } catch (error) {
-      console.error(`❌ API Error: ${error.message}`);
+      console.error(`API Error: ${error.message}`);
       throw error;
     }
   }
@@ -53,51 +48,9 @@ class ApiClient {
     return response.data;
   }
 
-  async getAPODRange(startDate, endDate) {
-    const endpoint = `/api/apod/range?start_date=${startDate}&end_date=${endDate}`;
-    const response = await this.request(endpoint);
-    return response.data;
-  }
-
-  async getRandomAPOD(count = 1) {
-    const endpoint = `/api/apod/random?count=${count}`;
-    const response = await this.request(endpoint);
-    return response.data;
-  }
-
-  async getRecentAPOD(days = 7) {
-    const endpoint = `/api/apod/recent?days=${days}`;
-    const response = await this.request(endpoint);
-    return response.data;
-  }
-
   // Asteroid API methods
   async getAsteroidFeed(startDate, endDate) {
     const endpoint = `/api/asteroids/feed?start_date=${startDate}&end_date=${endDate}`;
-    const response = await this.request(endpoint);
-    return response.data;
-  }
-
-  async getTodayAsteroids() {
-    const endpoint = '/api/asteroids/today';
-    const response = await this.request(endpoint);
-    return response.data;
-  }
-
-  async getAsteroidById(asteroidId) {
-    const endpoint = `/api/asteroids/${asteroidId}`;
-    const response = await this.request(endpoint);
-    return response.data;
-  }
-
-  async browseAsteroids(page = 0, size = 20) {
-    const endpoint = `/api/asteroids/browse/all?page=${page}&size=${size}`;
-    const response = await this.request(endpoint);
-    return response.data;
-  }
-
-  async getHazardousAsteroids(days = 7) {
-    const endpoint = `/api/asteroids/hazardous/list?days=${days}`;
     const response = await this.request(endpoint);
     return response.data;
   }
@@ -107,22 +60,14 @@ class ApiClient {
     const endpoint = '/api/health';
     return await this.request(endpoint);
   }
-
-  async getDeepHealthStatus() {
-    const endpoint = '/api/health/deep';
-    return await this.request(endpoint);
-  }
-  async askCosmicAI(question){
+  // Cosmic AI methods
+  async askCosmicAI(question) {
     const endpoint = '/api/cosmicai/ask';
-    const response = await this.request(endpoint,{
+    const response = await this.request(endpoint, {
       method: 'POST',
-      body: JSON.stringify({question})
+      body: JSON.stringify({ question })
     });
     return response.data;
-  }
-  async getCosmicAIHealth(){
-    const endpoint = '/api/cosmicai/health';
-    return await this.request(endpoint);
   }
 }
 
